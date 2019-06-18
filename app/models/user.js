@@ -234,12 +234,25 @@ UserSchema.statics = {
    * @api private
    */
 
-  load: function(options, cb) {
-    options.select = options.select || 'name username hashed_password salt reset_token_expire email active';
-
-    return this.findOne(options.criteria)
-      .select(options.select)
-      .exec(cb);
+  load: function(userId) {
+    return this.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(userId) } },
+      {
+        $project: {
+          name: 1,
+          email: 1,
+          username: 1,
+          twitter: 1,
+          github: 1,
+          google: 1,
+          full_address: 1,
+          phone_number: 1,
+          avatar: {
+            $concat: [`/${config.DIR_UPLOAD_FILE.split('/').slice(2)[0]}/`, '$avatar'],
+          },
+        },
+      },
+    ]);
   },
 
   getMyContactRequest: function(userId, options) {
@@ -275,13 +288,7 @@ UserSchema.statics = {
   },
 
   updateInfo: function(options) {
-    try {
-      this.updateOne(options.criteria, options.data);
-
-      return true;
-    } catch (err) {
-      return false;
-    }
+    return this.updateOne({ _id: mongoose.Types.ObjectId(options.criteria._id) }, { $set: options.data });
   },
 
   acceptRequest: function(userId, requestUserIds) {
