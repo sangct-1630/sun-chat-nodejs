@@ -15,13 +15,12 @@ const authValidate = {
     maxLength: 20,
   },
 };
-const profileConfig = {
+const avatarValidate = {
   IMG_MAX_SIZE: 5, // MB
   IMG_TYPES: ['image/png', 'image/jpeg', 'image/gif'],
-  DIR_UPLOAD_FILE: './public/uploads/',
 };
 
 module.exports = {
   authValidate,
-  profileConfig,
+  avatarValidate,
 };

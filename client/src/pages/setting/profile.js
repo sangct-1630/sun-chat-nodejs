@@ -4,7 +4,7 @@ import { Input, Button, Alert, Icon, Form, Upload, message, Row, Col } from 'ant
 import { getUser, updateUser } from './../../api/user';
 import { authValidate } from './../../config/validate';
 import { withNamespaces } from 'react-i18next';
-import { profileConfig } from '../../config/validate';
+import { avatarValidate } from '../../config/validate';
 
 const FormItem = Form.Item;
 
@@ -160,22 +160,22 @@ class Profile extends React.Component {
   };
 
   handleChange = info => {
-    const types = profileConfig.IMG_TYPES;
+    const types = avatarValidate.IMG_TYPES;
 
     if (types.every(type => info.file.type !== type)) {
       message.error(
         this.props.t('user:validate.img_type', {
-          types: profileConfig.IMG_TYPES.join(', '),
+          types: avatarValidate.IMG_TYPES.join(', '),
         })
       );
 
       return;
     }
 
-    if (info.file.size / 1024 / 1024 > profileConfig.IMG_MAX_SIZE) {
+    if (info.file.size / 1024 / 1024 > avatarValidate.IMG_MAX_SIZE) {
       message.error(
         this.props.t('validate.img_size', {
-          max: profileConfig.IMG_MAX_SIZE,
+          max: avatarValidate.IMG_MAX_SIZE,
         })
       );
 
