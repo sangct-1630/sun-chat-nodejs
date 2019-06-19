@@ -234,10 +234,15 @@ UserSchema.statics = {
    * @api private
    */
 
-  load: function(userId) {
-    return this.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(userId) } },
+  load: function(userId, flagProfile = false) {
+    const query = [
       {
+        $match: { _id: mongoose.Types.ObjectId(userId) },
+      },
+    ];
+
+    if (flagProfile) {
+      query.push({
         $project: {
           name: 1,
           email: 1,
@@ -251,8 +256,22 @@ UserSchema.statics = {
             $concat: [`/${config.DIR_UPLOAD_FILE.split('/').slice(2)[0]}/`, '$avatar'],
           },
         },
-      },
-    ]);
+      });
+    } else {
+      query.push({
+        $project: {
+          name: 1,
+          username: 1,
+          hashed_password: 1,
+          salt: 1,
+          reset_token_expire: 1,
+          email: 1,
+          active: 1,
+        },
+      });
+    }
+
+    return this.aggregate(query);
   },
 
   getMyContactRequest: function(userId, options) {
