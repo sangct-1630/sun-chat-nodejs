@@ -52,12 +52,15 @@ class Sidebar extends React.Component {
 
   componentDidMount() {
     const currentRoomId = this.props.match.params.id;
+
     this.setState({ selected_room: currentRoomId });
 
     if (checkExpiredToken()) {
       const { page, filter_type } = this.state;
       let { rooms } = this.state;
+
       this.fetchData(page, filter_type);
+
       getQuantityRoomsByUserId(filter_type).then(res => {
         this.setState({
           quantity_chats: res.data.result,
@@ -110,6 +113,20 @@ class Sidebar extends React.Component {
         if (currentRoomId == res.roomId) {
           this.props.history.push(`/rooms/${this.props.userContext.my_chat_id}`);
         }
+      });
+
+      socket.on('update_info_room', res => {
+        this.setState(prevState => ({
+          rooms: prevState.rooms.map(room =>
+            room._id === res.room._id
+              ? {
+                  ...room,
+                  name: res.name,
+                  avatar: res.avatar !== undefined ? res.avatar : room.avatar,
+                }
+              : room
+          ),
+        }));
       });
     }
   }
