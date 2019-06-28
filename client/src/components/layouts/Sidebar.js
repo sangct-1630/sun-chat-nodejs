@@ -5,11 +5,12 @@ import { checkExpiredToken } from './../../helpers/common';
 import { getListRoomsByUser, getQuantityRoomsByUserId, togglePinnedRoom } from './../../api/room';
 import { Link } from 'react-router-dom';
 import config from './../../config/listRoom';
+import { ROOM_TYPE } from './../../config/room';
 import { withNamespaces } from 'react-i18next';
 import { SocketContext } from './../../context/SocketContext';
 import { withUserContext } from './../../context/withUserContext';
 import { withRouter } from 'react-router';
-import { getRoomAvatarUrl } from './../../helpers/common';
+import { getRoomAvatarUrl, getUserAvatarUrl } from './../../helpers/common';
 const { Sider } = Layout;
 
 class Sidebar extends React.Component {
@@ -222,7 +223,11 @@ class Sidebar extends React.Component {
           >
             <Link to={`/rooms/${room._id}`}>
               <div className="avatar-name">
-                <Avatar src={getRoomAvatarUrl(room.avatar)} />
+                <Avatar
+                  src={
+                    room.type === ROOM_TYPE.GROUP_CHAT ? getRoomAvatarUrl(room.avatar) : getUserAvatarUrl(room.avatar)
+                  }
+                />
                 &nbsp;&nbsp;
                 <span className="nav-text">{room.name}</span>
               </div>

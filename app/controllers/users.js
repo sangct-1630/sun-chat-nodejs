@@ -83,7 +83,7 @@ exports.update = async(function*(req, res) {
   const error = validationResult(req);
   const pathUserAvatar = config.DIR_UPLOAD_FILE.USER_AVATAR;
   const io = req.app.get('socketIO');
-  
+
   if (error.array().length) {
     const errors = customMessageValidate(error);
 
