@@ -66,7 +66,7 @@ class ListContacts extends React.Component {
       }));
     });
 
-    socket.on('update_info_user_in_list_contact', res => {
+    socket.on('update_user_info_in_list_contacts', res => {
       this.setState(prevState => ({
         contacts: prevState.contacts.map(contact =>
           contact._id === res.user_id

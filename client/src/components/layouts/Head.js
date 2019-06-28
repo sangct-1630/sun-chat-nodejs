@@ -26,7 +26,7 @@ class Head extends React.Component {
       const { socket } = this.context;
       socket.on('update_received_request_count', request_friend_count => {});
 
-      socket.on('update_avatar_user_in_header', res => {
+      socket.on('update_user_avatar', res => {
         this.setState({
           avatar: res.avatar !== undefined ? res.avatar : null,
         });

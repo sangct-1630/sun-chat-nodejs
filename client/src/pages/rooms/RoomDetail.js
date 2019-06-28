@@ -106,8 +106,8 @@ class RoomDetail extends React.Component {
       }));
     });
 
-    socket.on('update_info_room', res => {
-      if (this.state.roomInfo._id == res.room._id) {
+    socket.on('update_direct_room_info', res => {
+      if (this.state.roomInfo._id === res._id) {
         this.setState({
           roomInfo: {
             ...this.state.roomInfo,
