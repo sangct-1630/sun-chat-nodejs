@@ -150,7 +150,7 @@ const renderMessageToHtml = {
     let infoRegEx = /(\[info\])(((?!\[(\/?info)\]).)*)(\[\/info\])/s;
     let infoMatch = infoRegEx.exec(content);
     let titleRegEx = /(\[title\])(((?!\[(\/?title)\]).)*)(\[\/title\])/s;
-    console.log('info', infoMatch);
+
     while (infoMatch !== null) {
       if(titleRegEx.test(infoMatch[2])) {
         let titleMatch = titleRegEx.exec(infoMatch[2])
