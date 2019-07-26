@@ -841,7 +841,7 @@ class ChatBox extends React.Component {
                       avatar={<Avatar src={getUserAvatarUrl(member.avatar)} />}
                       title={
                         <a onClick={handlersMessage.actionFunc.toMember} href="javascript:;" data-mid={member._id}>
-                          {member.name}
+                          {member.nickname ? member.nickname.nickname : member.name}
                         </a>
                       }
                     />

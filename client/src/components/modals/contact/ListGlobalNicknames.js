@@ -22,12 +22,11 @@ class ListGlobalNicknames extends React.Component {
       hasMore: true,
       page: 1,
       totalContact: 0,
-      searchText: '',
     };
   }
 
-  fetchData = (page, searchText) => {
-    getListContacts(page, searchText)
+  fetchData = (page) => {
+    getListContacts(page)
       .then(res => {
         const { contacts } = this.state;
         res.data.result.map(item => {
@@ -52,14 +51,14 @@ class ListGlobalNicknames extends React.Component {
   };
 
   componentDidMount() {
-    const { page, searchText } = this.state;
+    const { page } = this.state;
 
-    this.fetchData(page, searchText);
+    this.fetchData(page);
   }
 
   handleInfiniteOnLoad = () => {
     const { t } = this.props;
-    let { page, contacts, totalContact, searchText } = this.state;
+    let { page, contacts, totalContact } = this.state;
     const newPage = parseInt(page) + 1;
     this.setState({
       loading: true,
@@ -74,7 +73,7 @@ class ListGlobalNicknames extends React.Component {
       return;
     }
 
-    this.fetchData(newPage, searchText);
+    this.fetchData(newPage);
   };
 
   setAvatar(avatar) {
@@ -91,6 +90,7 @@ class ListGlobalNicknames extends React.Component {
     const { contacts } = this.state;
     const nicknames = this.props.form.getFieldsValue();
     const data = [];
+    const currentRoomId = this.props.match.params.id;
 
     Object.keys(nicknames).map(function(key) {
       if (nicknames[key] !== undefined) {
@@ -107,7 +107,7 @@ class ListGlobalNicknames extends React.Component {
       }
     });
 
-    setNicknames(data)
+    setNicknames(data, currentRoomId)
       .then(res => {
         message.success(res.data.success);
       })

@@ -49,6 +49,19 @@ NicknameSchema.statics = {
     );
   },
 
+  delete: function(nickname) {
+    return this.updateOne(
+      {
+        _id: nickname._id,
+      },
+      {
+        $set: {
+          deletedAt: Date.now()
+        },
+      }
+    );
+  },
+
   getList: function(userId, roomId) {
     return this.aggregate([
       {

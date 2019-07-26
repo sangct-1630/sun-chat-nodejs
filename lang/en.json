@@ -267,7 +267,7 @@
     "get_list": {
       "failed": "Get list nickname by user failed"
     },
-    "set_nickname": {
+    "edit": {
       "success": "Set nickname for users successful",
       "failed": "Set nickname for users failed"
     }

@@ -26,7 +26,6 @@ class ListNicknames extends React.Component {
     const { t } = this.props;
     const members = this.props.members.filter(member => member._id !== this.props.userContext.info._id);
     const { getFieldDecorator } = this.props;
-
     const columns = [
       {
         title: '',
@@ -46,7 +45,7 @@ class ListNicknames extends React.Component {
         render: (nickname, member) => (
           <Form.Item name="nickname" className="form-nickname">
             {getFieldDecorator(member._id, {
-              initialValue: member.nickname !== undefined ? nickname.nickname : undefined,
+              initialValue: (member.nickname !== undefined && member.nickname.room_id !== null) ? nickname.nickname : undefined,
             })(<Input />)}
           </Form.Item>
         ),

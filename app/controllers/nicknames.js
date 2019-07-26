@@ -5,6 +5,7 @@
  */
 
 const Nickname = require('../models/nickname.js');
+const Room = require('../models/room.js');
 const logger = require('./../logger/winston');
 const channel = logger.init('error');
 
@@ -36,11 +37,13 @@ exports.getNicknameByUserInRoom = async (req, res) => {
 
 exports.edit = async function(req, res) {
   const nicknames = req.body;
-  const { _id } = req.decoded;
+  const currentRoomId = req.params.roomId;
+  const ownerId = req.decoded._id;
+  const io = req.app.get('socketIO');
 
-  nicknames.forEach(function(nickname) {
-    nickname.owner = _id;
-  });
+  nicknames.map(nickname => {
+    nickname.owner = ownerId;
+  })
 
   const newNicknames = [];
   const existNicknames = [];
@@ -53,15 +56,21 @@ exports.edit = async function(req, res) {
     await Nickname.insertMany(newNicknames);
 
     existNicknames.map(async nickname => {
-      await Nickname.edit(nickname);
+      nickname.nickname !== '' ? await Nickname.edit(nickname) : await Nickname.delete(nickname)
     });
 
+    const members = await Room.getMembersOfRoom(currentRoomId, ownerId)
+    io.to(ownerId).emit('edit_nickname', members.map(member => member.user))
+
+
     return res.status(200).json({
-      success: __('nickname.set_nickname.success'),
+      success: __('nickname.edit.success'),
     });
   } catch (err) {
+    channel.error(err);
+
     return res.status(500).json({
-      error: __('nickname.set_nickname.failed'),
+      error: __('nickname.edit.failed'),
     });
   }
 };

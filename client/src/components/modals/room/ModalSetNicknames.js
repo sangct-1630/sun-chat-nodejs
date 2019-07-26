@@ -12,13 +12,13 @@ class ModalSetNicknames extends Component {
     visible: false,
     showComponent: false,
     members: this.props.members,
-    room_id: this.props.match.params.id,
+    roomId: this.props.match.params.id,
   };
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       members: nextProps.members,
-      room_id: nextProps.match.params.id,
+      roomId: nextProps.match.params.id,
     });
   }
 
@@ -30,23 +30,19 @@ class ModalSetNicknames extends Component {
     this.props.hidePopoverTo();
   };
 
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
   handleCancel = e => {
     this.setState({
       visible: false,
       showComponent: false,
     });
+
+    this.props.form.resetFields()
   };
 
   handleSubmit = e => {
     e.preventDefault();
 
-    const { members, room_id } = this.state;
+    const { members, roomId } = this.state;
     const nicknames = this.props.form.getFieldsValue();
     const data = [];
     Object.keys(nicknames).map(function(key) {
@@ -54,17 +50,17 @@ class ModalSetNicknames extends Component {
         members.map(member => {
           if (member._id == key) {
             data.push({
-              _id: member.nickname !== undefined ? member.nickname._id : undefined,
+              _id: (member.nickname !== undefined && member.nickname.room_id !== null) ? member.nickname._id : undefined,
               user_id: member._id,
               nickname: nicknames[key],
-              room_id,
+              room_id: roomId,
             });
           }
         });
       }
     });
 
-    setNicknames(data)
+    setNicknames(data, roomId)
       .then(res => {
         message.success(res.data.success);
       })
@@ -75,6 +71,8 @@ class ModalSetNicknames extends Component {
     this.setState({
       visible: false,
     });
+
+    this.props.form.resetFields()
   };
 
   render() {
@@ -104,7 +102,6 @@ class ModalSetNicknames extends Component {
           >
             <h2 className="title-contact">{t('title.set_nickname')}</h2>
             <ListNicknames
-              handleOk={this.handleOk}
               members={this.state.members}
               getFieldDecorator={getFieldDecorator}
             />
