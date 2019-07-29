@@ -382,7 +382,6 @@ UserSchema.statics = {
                     { $eq: ['$deletedAt', null] },
                     { $eq: ['$room_id', null] },
                   ],
-
                 },
               },
             },
