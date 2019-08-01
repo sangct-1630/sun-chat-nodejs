@@ -62,6 +62,20 @@ NicknameSchema.statics = {
     );
   },
 
+  deleteGlobalNickname(userId) {
+    return this.updateOne(
+      {
+        user_id: userId,
+        room_id: null
+      },
+      {
+        $set: {
+          deletedAt: Date.now()
+        },
+      }
+    );
+  },
+
   getList: function(userId, roomId) {
     return this.aggregate([
       {
