@@ -824,7 +824,6 @@ class ChatBox extends React.Component {
   // generate list TO - BEGIN
   generateListTo = () => {
     const { t, allMembers, roomInfo } = this.props;
-    console.log(allMembers)
     const currentUserInfo = this.props.userContext.info;
     const content = allMembers == [] ? (
       <span>{t('not_data')}</span>
@@ -843,7 +842,8 @@ class ChatBox extends React.Component {
                 return member._id != currentUserInfo._id ? (
                   <List.Item key={member._id}>
                     <List.Item.Meta
-                      avatar={<Avatar size={avatarConfig.AVATAR.SIZE.MEDIUM} src={getUserAvatarUrl(member.avatar)} />}
+                      className="item-to"
+                      avatar={<Avatar size={avatarConfig.AVATAR.SIZE.SMALL} src={getUserAvatarUrl(member.avatar)} />}
                       title={
                         <a onClick={handlersMessage.actionFunc.toMember} href="javascript:;" data-mid={member._id}>
                           {member.nickname ? member.nickname.nickname : member.name}

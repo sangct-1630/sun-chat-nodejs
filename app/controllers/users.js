@@ -755,9 +755,9 @@ exports.deleteContact = async(function*(req, res) {
   const io = req.app.get('socketIO');
   try {
     let room = yield User.deleteContact(_id, contactId);
-    yield Nickname.deleteGlobalNickname(contactId)
+    yield Nickname.deleteGlobalNickname(contactId, _id);
 
-    io.to(_id).emit('remove_global_nickname_from_list_contacts', { contactId })
+    io.to(_id).emit('remove_global_nickname_from_list_contacts', { contactId });
     io.to(_id).emit('remove_from_list_rooms', { roomId: room._id });
     io.to(contactId).emit('remove_from_list_rooms', { roomId: room._id });
     return res.status(200).json({
