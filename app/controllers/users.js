@@ -750,12 +750,26 @@ exports.resendActiveEmail = async(function*(req, res) {
 });
 
 exports.deleteContact = async(function*(req, res) {
-  const { contactId } = req.body;
+  const { contactId, currentRoomId } = req.body;
   const { _id } = req.decoded;
   const io = req.app.get('socketIO');
   try {
     let room = yield User.deleteContact(_id, contactId);
     yield Nickname.deleteGlobalNickname(contactId, _id);
+
+    if (currentRoomId) {
+      let nicknames = {};
+      const results = yield Nickname.getList(_id, currentRoomId);
+
+      if (results.length > 0) {
+        nicknames = results.reduce((object, nickname, i) => {
+          object[nickname.user_id] = nickname.nickname;
+
+          return object;
+        }, {});
+      }
+      io.to(_id).emit('remove_global_nickname_from_message', nicknames);
+    }
 
     io.to(_id).emit('remove_global_nickname_from_list_contacts', { contactId });
     io.to(_id).emit('remove_from_list_rooms', { roomId: room._id });

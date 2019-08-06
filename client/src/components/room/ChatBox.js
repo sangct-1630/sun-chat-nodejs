@@ -172,6 +172,10 @@ class ChatBox extends React.Component {
       this.setState({ nicknames });
     });
 
+    this.socket.on('remove_global_nickname_from_message', nicknames => {
+      this.setState({ nicknames });
+    });
+
     if (!localStorage.getItem('descW')) {
       saveSizeComponentsChat();
     }
